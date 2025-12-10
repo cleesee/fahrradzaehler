@@ -35,20 +35,40 @@ def add_station_features(df_station, station_name, df_city):
 def train_model(df_station, station_name, df_city):
     """
     Train regression model to predict station traffic using temporal features + other station counts
+    Only uses time frames where ALL stations have data available
     
     Returns: (results_dict, model, feature_list)
     """
+    # First, find timestamps where ALL stations have data
+    df_pivot_all = df_city.pivot_table(
+        index='iso_timestamp',
+        columns='counter_site',
+        values='channels_all'
+    )
+    
+    n_total_timestamps = len(df_pivot_all)
+    
+    # Keep only timestamps with complete data across all stations
+    valid_timestamps = df_pivot_all.dropna().index
+    n_valid = len(valid_timestamps)
+    coverage_pct = (n_valid / n_total_timestamps * 100) if n_total_timestamps > 0 else 0
+    
+    # Filter target station to valid timestamps only
+    df_station = df_station[df_station['iso_timestamp'].isin(valid_timestamps)].copy()
+    
+    print(f"    Complete coverage: {n_valid:,}/{n_total_timestamps:,} hours ({coverage_pct:.1f}%)")
+    
+    # Check if we have any data after filtering
+    if len(df_station) == 0:
+        print(f"    ⊗ No overlapping data with other stations - skipping")
+        return None, None, None
+    
     # Add station features
     df_model = add_station_features(df_station, station_name, df_city)
     
     # Select features (temporal only, no is_weekend since we have day_of_week)
     temporal_features = ['hour', 'day_of_week', 'month']
-    weather_features = []
-    
-    # Include weather if available (>10% coverage)
-    for weather_col in ['site_temperature', 'site_rain_accumulation']:
-        if weather_col in df_model.columns and df_model[weather_col].notna().mean() > 0.1:
-            weather_features.append(weather_col)
+    weather_features = []  # Excluding weather features initially
     
     # Get station features
     station_features = [col for col in df_model.columns if col.startswith('station_')]
@@ -56,14 +76,27 @@ def train_model(df_station, station_name, df_city):
     # Combine all features
     features = temporal_features + weather_features + station_features
     
+    # Check if we have enough data for train/test split
+    if len(df_model) < 100:
+        print(f"    Insufficient overlapping data ({len(df_model)} hours)")
+        return None, None, None
+    
+    # Print time frame info
+    if len(df_model) > 0:
+        df_model_sorted = df_model.sort_values('iso_timestamp')
+        start_date = df_model_sorted['iso_timestamp'].iloc[0]
+        end_date = df_model_sorted['iso_timestamp'].iloc[-1]
+        date_range = (pd.to_datetime(end_date) - pd.to_datetime(start_date)).days
+        print(f"    Time frame: {start_date} to {end_date} ({date_range} days, {len(df_model):,} hours)")
+    
     # Split train/test (80/20)
     split_idx = int(len(df_model) * 0.8)
     train_data = df_model.iloc[:split_idx]
     test_data = df_model.iloc[split_idx:]
     
-    # Prepare X and y
-    X_train = train_data[features].fillna(0)
-    X_test = test_data[features].fillna(0)
+    # Prepare X and y (no fillna needed since we dropped missing values)
+    X_train = train_data[features]
+    X_test = test_data[features]
     y_train = train_data['channels_all']
     y_test = test_data['channels_all']
     
