@@ -37,6 +37,33 @@ Summary Statistics:
 
 ![alt text](<../plots/data_availability_Stadt Heidelberg.png>)
 
+
+| Station | R² (with) | RMSE (with) | MAE (with) | R² (no outl) | RMSE (no outl) | MAE (no outl) | ΔR² | Features | n_train | n_train_no_outl |
+|---------|-----------|-------------|------------|--------------|----------------|---------------|-----|----------|---------|-----------------|
+| Plöck                          |    0.8339 |       51.94 |      29.92 |       0.8244 |          51.86 |         29.80 | -0.0095 |       16 |    9244 |            9189 |
+| Gaisbergstraße                 |    0.9611 |       29.49 |      19.15 |       0.9595 |          28.99 |         18.81 | -0.0016 |       16 |    9244 |            9189 |
+| Mannheimer Straße              |    0.9533 |       16.29 |      10.69 |       0.9533 |          15.66 |         10.34 | +0.0001 |       16 |    9244 |            9189 |
+| Ernst-Walz-Brücke Querschnitt  |    0.9322 |       66.47 |      47.05 |       0.9274 |          64.75 |         46.00 | -0.0048 |       16 |    9244 |            9189 |
+| Thedor-Heuss-Brücke Querschnit |    0.9697 |       45.98 |      29.96 |       0.9674 |          46.11 |         30.03 | -0.0023 |       16 |    9244 |            9189 |
+| Rohrbacher Straße Querschnitt  |    0.9647 |       18.47 |      12.69 |       0.9626 |          18.26 |         12.52 | -0.0021 |       16 |    9244 |            9189 |
+| Liebermannstraße               |    0.9798 |       20.77 |      13.83 |       0.9791 |          20.46 |         13.60 | -0.0008 |       16 |    9244 |            9189 |
+| Schlierbacher Landstraße       |    0.8762 |       11.60 |       6.80 |       0.8759 |          11.16 |          6.59 | -0.0003 |       16 |    9244 |            9189 |
+| Ziegelhäuser Landstraße        |    0.8399 |       13.49 |       8.33 |       0.8525 |          12.60 |          8.03 | +0.0126 |       16 |    9244 |            9189 |
+| Kurfürstenanlage Querschnitt   |    0.8824 |       15.00 |      10.04 |       0.8765 |          14.92 |          9.98 | -0.0059 |       16 |    9244 |            9189 |
+| Hardtstraße                    |    0.9561 |       13.10 |       8.72 |       0.9551 |          12.83 |          8.58 | -0.0011 |       16 |    9244 |            9189 |
+| Berliner Straße Querschnitt    |    0.8423 |        9.63 |       7.13 |       0.8322 |           9.40 |          6.97 | -0.0101 |       16 |    9244 |            9189 |
+| Eppelheimer Str. Querschnitt   |    0.8980 |        9.16 |       6.30 |       0.8952 |           8.89 |          6.12 | -0.0028 |       16 |    9244 |            9189 |
+| Bahnstadtpromenade             |    0.9527 |       24.64 |      16.61 |       0.9508 |          24.15 |         16.36 | -0.0018 |       16 |    9244 |            9189 |
+
+Summary Statistics:
+  Excluded station:          Ernst-Walz-Brücke West - alt
+  Outlier threshold:         >1000 hourly counts
+  Avg R² (with outliers):    0.9173 ± 0.0533
+  Avg R² (no outliers):      0.9151 ± 0.0541
+  Avg ΔR²:                   -0.0022 ± 0.0053
+  Avg RMSE (with outliers):  24.72 ± 17.72
+  Avg RMSE (no outliers):    24.29 ± 17.56
+
 **SUMMARY - Stadt Konstanz**
 ![alt text](<../plots/data_availability_Stadt Konstanz.png>)
 
