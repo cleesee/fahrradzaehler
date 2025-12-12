@@ -1,8 +1,8 @@
 ## Regression
 
-Features: hour, day_of_week, month, + hourly counts from other stations
-Selection: Only use datapoints where data from all stations is available
-Oultier threshhold: 1000
+Features: hour, day_of_week, month, + hourly counts from other stations  
+Selection: Only use datapoints where data from all stations is available  
+Oultier threshhold: 1000  
 
 
 **SUMMARY - Stadt Freiburg**
