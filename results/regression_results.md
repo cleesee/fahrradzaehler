@@ -7,6 +7,8 @@ Oultier threshhold: 1000
 
 **SUMMARY - Stadt Freiburg**
 
+![alt text](<../plots/data_availability_Stadt Freiburg.png>)
+
 
 
 | Station | R² (with) | RMSE (with) | MAE (with) | R² (no outl) | RMSE (no outl) | MAE (no outl) | ΔR² | Features | n_train | n_train_no_outl |
