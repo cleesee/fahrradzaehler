@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 
 # load the data from files
 def load_csv_folder_to_dataframe(
