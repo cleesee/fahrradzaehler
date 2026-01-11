@@ -1,4 +1,9 @@
-data/*
-cache
-cache/*
+# Ignore only CSVs in data/raw
+data/raw/*.csv
+
+# Ignore everything in data/processed
+data/processed/
+
+# Ignore cache folders
+cache/
 __pycache__/
