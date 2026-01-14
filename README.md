@@ -1,4 +1,4 @@
-# Data Quality Assessment
+# 1. Data Quality Assessment
 
 ## 1.1: Sanity checks
 
