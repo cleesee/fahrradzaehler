@@ -1,3 +1,10 @@
+jupyter 
+ipykernel 
+matplotlib 
+numpy
 tqdm
 osmnx
 pandas
+tueplots
+seaborn
+scikit-learn
