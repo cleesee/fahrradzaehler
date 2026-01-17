@@ -1,0 +1,104 @@
+% main.tex
+\title{Biking through Tübingen City with Gaussian Processing}
+
+\author{Matthis Noel, Clemens Seethaler, David Suckrow, Lea Szagun}
+
+\newcommand{\abstractText}{\noindent
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis pretium diam. Nulla facilisi. Mauris efficitur rutrum erat, ac pulvinar metus imperdiet quis. Aliquam vel pharetra massa. Pellentesque ullamcorper, urna ac rhoncus ultricies, nunc dui lobortis erat, placerat hendrerit lectus ligula vel libero. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam enim elit, hendrerit vulputate consectetur sit amet, convallis id libero. Morbi lectus nulla, malesuada tempor ante a, consequat ullamcorper tellus. Aliquam ut nisi placerat libero fringilla interdum et sit amet magna. Maecenas ullamcorper enim ac ligula semper commodo. Curabitur eu odio vitae neque. 
+}
+
+%%%%%%%%%%%%%%%%%
+% Configuration %
+%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt, a4paper, twocolumn]{article}
+\usepackage{xurl}
+\usepackage[super,comma,sort&compress]{natbib}
+\usepackage{abstract}
+\renewcommand{\abstractnamefont}{\normalfont\bfseries}
+\renewcommand{\abstracttextfont}{\normalfont\small\itshape}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage[left=2.54cm, right=2.54cm, top=2.54cm, bottom=2.54cm]{geometry}
+\usepackage{multirow,booktabs,setspace,caption}
+
+
+%%%%%%%%%%%%%%
+% References %
+%%%%%%%%%%%%%%
+
+% If changing the name of the bib file, change \bibliography{test} at the bottom
+\begin{filecontents}{test.bib}
+
+@article{GaussianProcess,
+  note    = "Rasmussen, C. E., $\&$ Williams, C. K. I. (2006). Gaussian Processes for Machine Learning. \textit{MIT Press}. https://doi.org/10.7551/mitpress/3206.001.0001"
+}
+
+@article{LinearRegression,
+  note    = "Montgomery, D. C., Peck, E. A., $\&$ Vining, G. G. (2012). Introduction to Linear Regression Analysis (5th ed.). \textit{Wiley}. https://doi.org/10.1002/9781118392574"
+}
+
+
+\end{filecontents}
+
+% Any configuration that should be done before the end of the preamble:
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue}
+
+\begin{document}
+
+%%%%%%%%%%%%
+% Abstract %
+%%%%%%%%%%%%
+
+\twocolumn[
+  \begin{@twocolumnfalse}
+    \maketitle
+    \begin{abstract}
+      \abstractText
+      \newline 
+      \newline 
+    \end{abstract}
+  \end{@twocolumnfalse}
+]
+
+%%%%%%%%%%%
+% Article %
+%%%%%%%%%%%
+
+\section{Introduction}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis pretium diam. Nulla facilisi. Mauris efficitur rutrum erat, ac pulvinar metus imperdiet quis. Aliquam vel pharetra massa. Pellentesque ullamcorper, urna ac rhoncus ultricies, nunc dui lobortis erat, placerat hendrerit lectus ligula vel libero. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam enim elit, hendrerit vulputate consectetur sit amet, convallis id libero. Morbi lectus nulla, malesuada tempor ante a, consequat ullamcorper tellus. Aliquam ut nisi placerat libero fringilla interdum et sit amet magna. Maecenas ullamcorper enim ac ligula semper commodo. Curabitur eu odio vitae neque. 
+
+\section{Materials, Methods}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis pretium diam. Nulla facilisi. Mauris efficitur rutrum erat, ac pulvinar metus imperdiet quis. Aliquam vel pharetra massa. Pellentesque ullamcorper, urna ac rhoncus ultricies, nunc dui lobortis erat, placerat hendrerit lectus ligula vel libero. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam enim elit, hendrerit vulputate consectetur sit amet, convallis id libero. Morbi lectus nulla, malesuada tempor ante a, consequat ullamcorper tellus. Aliquam ut nisi placerat libero fringilla interdum et sit amet magna. Maecenas ullamcorper enim ac ligula semper commodo. Curabitur eu odio vitae neque. 
+
+
+\section{Results}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis pretium diam. Nulla facilisi. Mauris efficitur rutrum erat, ac pulvinar metus imperdiet quis. Aliquam vel pharetra massa. Pellentesque ullamcorper, urna ac rhoncus ultricies, nunc dui lobortis erat, placerat hendrerit lectus ligula vel libero. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam enim elit, hendrerit vulputate consectetur sit amet, convallis id libero. Morbi lectus nulla, malesuada tempor ante a, consequat ullamcorper tellus. Aliquam ut nisi placerat libero fringilla interdum et sit amet magna. Maecenas ullamcorper enim ac ligula semper commodo. Curabitur eu odio vitae neque. 
+
+\section{Discussion}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis pretium diam. Nulla facilisi. Mauris efficitur rutrum erat, ac pulvinar metus imperdiet quis. Aliquam vel pharetra massa. Pellentesque ullamcorper, urna ac rhoncus ultricies, nunc dui lobortis erat, placerat hendrerit lectus ligula vel libero. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam enim elit, hendrerit vulputate consectetur sit amet, convallis id libero. Morbi lectus nulla, malesuada tempor ante a, consequat ullamcorper tellus. Aliquam ut nisi placerat libero fringilla interdum et sit amet magna. Maecenas ullamcorper enim ac ligula semper commodo. Curabitur eu odio vitae neque. 
+
+
+
+%%%%%%%%%%
+% Format %
+%%%%%%%%%%
+
+% \the\columnwidth \\
+
+
+
+%%%%%%%%%%%%%%
+% References %
+%%%%%%%%%%%%%%
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{test}
+
+\end{document}
