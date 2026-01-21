@@ -107,12 +107,22 @@ def train_model(df_station, station_name, df_city):
     # Evaluate
     y_pred_test = model.predict(X_test)
     
+    # Calculate MAPE only on non-zero values (filter out hours with very low counts)
+    # MAPE is undefined/explodes when actual values are near zero
+    MIN_COUNT_FOR_MAPE = 5  # Only calculate MAPE on hours with at least 5 bikes
+    mask_nonzero = y_test >= MIN_COUNT_FOR_MAPE
+    
+    if mask_nonzero.sum() > 0:
+        mape = mean_absolute_percentage_error(y_test[mask_nonzero], y_pred_test[mask_nonzero]) * 100
+    else:
+        mape = np.nan  # Not enough data to calculate meaningful MAPE
+    
     results = {
         'station': station_name,
         'test_r2': r2_score(y_test, y_pred_test),
         'test_rmse': np.sqrt(mean_squared_error(y_test, y_pred_test)),
         'test_mae': mean_absolute_error(y_test, y_pred_test),
-        'test_mape': mean_absolute_percentage_error(y_test, y_pred_test),
+        'test_mape': mape,
         'n_features': len(features),
         'temporal_features': temporal_features,
         'weather_features': weather_features,
