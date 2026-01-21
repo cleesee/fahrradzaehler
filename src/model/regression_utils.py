@@ -5,7 +5,7 @@ Utility functions for bike counter regression analysis
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error, mean_absolute_percentage_error
 
 
 def add_station_features(df_station, station_name, df_city):
@@ -112,6 +112,7 @@ def train_model(df_station, station_name, df_city):
         'test_r2': r2_score(y_test, y_pred_test),
         'test_rmse': np.sqrt(mean_squared_error(y_test, y_pred_test)),
         'test_mae': mean_absolute_error(y_test, y_pred_test),
+        'test_mape': mean_absolute_percentage_error(y_test, y_pred_test),
         'n_features': len(features),
         'temporal_features': temporal_features,
         'weather_features': weather_features,

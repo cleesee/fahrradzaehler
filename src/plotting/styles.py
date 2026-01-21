@@ -37,3 +37,21 @@ def get_style(font_adjustment=0, rel_width=1, alpha=0.7, display_dpi=200):
     })
 
     return jmlr_style
+
+def latex_escape(text: str) -> str:
+    repl = {
+        "\\": r"\textbackslash{}",
+        "&": r"\&",
+        "%": r"\%",
+        "$": r"\$",
+        "#": r"\#",
+        "_": r"\_",
+        "{": r"\{",
+        "}": r"\}",
+        "~": r"\textasciitilde{}",
+        "^": r"\textasciicircum{}",
+    }
+    for k, v in repl.items():
+        text = text.replace(k, v)
+    return text
+
