@@ -136,7 +136,7 @@ def train_model(df_station, station_name, df_city):
     y_pred_test = model.predict(X_test)
     
     # MAPE explodes when actual values are near zero
-    MIN_COUNT_FOR_MAPE = 5  # Only calculate MAPE on hours with at least 5 bikes
+    MIN_COUNT_FOR_MAPE = 10  # Only calculate MAPE on hours with at least 10 bikes
     mask_nonzero = y_test >= MIN_COUNT_FOR_MAPE
     
     if mask_nonzero.sum() > 0:
