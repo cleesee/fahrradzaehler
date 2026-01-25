@@ -67,8 +67,8 @@ def train_model(df_station, station_name, df_city):
     df_station = df_station[df_station['iso_timestamp'].isin(valid_timestamps)].copy()
     n_samples_after_overlap = len(df_station)  # rows left after keeping only timestamps with full city coverage
 
-    
-    print(f"    Complete coverage: {n_valid:,}/{n_total_timestamps:,} hours ({coverage_pct:.1f}%)")
+    # Print coverage BEFORE feature cleaning
+    print(f"    Complete coverage: {n_valid:,}/{n_total_timestamps:,} hours ({coverage_pct:.1f}%) → {n_samples_after_overlap:,} samples before features")
     
     # Check if we have any data after filtering
     if len(df_station) == 0:
@@ -77,12 +77,10 @@ def train_model(df_station, station_name, df_city):
     
     # Add station features
     df_model = add_station_features(df_station, station_name, df_city)
-    n_samples_after_features = len(df_model)  # rows left after feature construction (may drop more rows)
-
     
     # Select features (temporal only, no is_weekend since we have day_of_week)
     temporal_features = ['hour', 'day_of_week', 'month']
-    weather_features = []  # Excluding weather features, no good coverage and data
+    weather_features = ['site_temperature', 'site_rain_accumulation'] 
     
     # Get station features
     station_features = [col for col in df_model.columns if col.startswith('station_')]
@@ -90,39 +88,43 @@ def train_model(df_station, station_name, df_city):
     # Combine all features
     features = temporal_features + weather_features + station_features
     
-    # Check if we have enough data for train/test split
-    if len(df_model) < 100:
-        print(f"    Insufficient overlapping data ({len(df_model)} hours)")
-        return None, None, None
-    
     # IMPORTANT: Sort by timestamp to ensure temporal train/test split
     # This ensures first 80% of time period is training, last 20% is testing
     df_model = df_model.sort_values('iso_timestamp').reset_index(drop=True)
     
-    # Print time frame info
-    start_date = df_model['iso_timestamp'].iloc[0]
-    end_date = df_model['iso_timestamp'].iloc[-1]
-    date_range = (pd.to_datetime(end_date) - pd.to_datetime(start_date)).days
-    print(f"    Time frame: {start_date} to {end_date} ({date_range} days, {len(df_model):,} hours)")
+    # Drop rows with missing features BEFORE splitting
+    # This ensures we only work with complete data
+    n_before_drop = len(df_model)
+    df_complete = df_model.dropna(subset=features)
+    n_dropped = n_before_drop - len(df_complete)
     
-    # Split train/test (80/20) - TEMPORAL SPLIT
-    split_idx = int(len(df_model) * 0.8)
-    train_data = df_model.iloc[:split_idx]
-    test_data = df_model.iloc[split_idx:]
-    n_train_samples = split_idx
-    n_test_samples = len(df_model) - split_idx
-
+    # Print coverage AFTER feature cleaning
+    if n_dropped > 0:
+        print(f"    After feature cleaning: {len(df_complete):,} samples ({n_dropped:,} dropped due to missing features, {n_dropped/n_before_drop*100:.1f}%)")
+    else:
+        print(f"    After feature cleaning: {len(df_complete):,} samples (no rows dropped)")
+    
+    if len(df_complete) < 100:
+        print(f"    Insufficient data after cleaning: {len(df_complete)} hours")
+        return None, None, None
+    
+    # NOW split train/test (80/20) on the clean data - TEMPORAL SPLIT
+    split_idx = int(len(df_complete) * 0.8)
+    train_data = df_complete.iloc[:split_idx]
+    test_data = df_complete.iloc[split_idx:]
+    n_train_samples = len(train_data)
+    n_test_samples = len(test_data)
     
     # Sanity check: verify temporal ordering
     train_end = train_data['iso_timestamp'].iloc[-1]
     test_start = test_data['iso_timestamp'].iloc[0]
-    print(f"    Train period: {train_data['iso_timestamp'].iloc[0]} to {train_end}")
-    print(f"    Test period:  {test_start} to {test_data['iso_timestamp'].iloc[-1]}")
+    print(f"    Train period: {train_data['iso_timestamp'].iloc[0]} to {train_end} ({n_train_samples:,} hours)")
+    print(f"    Test period:  {test_start} to {test_data['iso_timestamp'].iloc[-1]} ({n_test_samples:,} hours)")
     
     if train_end >= test_start:
         print(f"    WARNING: Train/test periods overlap! Check data sorting.")
     
-    # Prepare X and y (no fillna needed since we dropped missing values)
+    # Prepare X and y
     X_train = train_data[features]
     X_test = test_data[features]
     y_train = train_data['channels_all']
@@ -154,8 +156,6 @@ def train_model(df_station, station_name, df_city):
         'temporal_features': temporal_features,
         'weather_features': weather_features,
         'n_stations': len(station_features),
-        'n_samples_after_overlap': n_samples_after_overlap,
-        'n_samples_after_features': n_samples_after_features,
         'n_train_samples': n_train_samples,
         'n_test_samples': n_test_samples,
     }
