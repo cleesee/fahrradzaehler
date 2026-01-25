@@ -1,42 +1,75 @@
 import matplotlib.pyplot as plt
-import numpy as np
-import tueplots.bundles as bundles
-import tueplots.fontsizes as fontsizes
-from cycler import cycler
 import matplotlib.colors as mcolors
+from cycler import cycler
+
+from tueplots import bundles
+from tueplots.constants.color import rgb
 
 
-def get_style(font_adjustment=0, rel_width=1, alpha=0.7, display_dpi=200):
-    jmlr_style = bundles.jmlr2001(rel_width=rel_width)
+def get_style(
+    column="half",
+    nrows=1,
+    ncols=1,
+    font_adjustment=0.0,
+    rel_width=None,
+    alpha=0.7,
+    display_dpi=200,
+    use_tue_palette=True,
+):
+    """
+    Returns an rcParams dict compatible with:
+        plt.rcParams.update(get_style_icml2024(...))
 
-    base_colors = [
-        'tab:blue',
-        'tab:orange',
-        'tab:green',
-        'tab:red',
-        'tab:purple',
-        'tab:brown',
-        'tab:pink',
-        'tab:gray',
-        'tab:olive',
-        'tab:cyan',
-    ]
-    rgba_colors = [mcolors.to_rgba(c, alpha=alpha) for c in base_colors]
+    Parameter:
+      - column: "full" oder "half" (tueplots bundle option)
+      - nrows, ncols: subplot layout (tueplots bundle option)
+      - font_adjustment: additive Anpassung der Schriftgrößen
+      - alpha: Transparenz für die Linienfarben
+      - display_dpi: DPI fürs Notebook/Screen-Rendering
+      - use_tue_palette: Uni-Tübingen Farbpalette statt Matplotlib default
+    """
+    style = bundles.icml2024(column=column, nrows=nrows, ncols=ncols)
 
-    jmlr_style.update({
-        'font.size': 10.95 + font_adjustment,
-        'axes.labelsize': 10.95 + font_adjustment,
-        'legend.fontsize': 8.95 + font_adjustment,
-        'xtick.labelsize': 8.95 + font_adjustment,
-        'ytick.labelsize': 8.95 + font_adjustment,
-        'axes.titlesize': 10.95 + font_adjustment,
-        'axes.prop_cycle': cycler(color=rgba_colors),
-                # Quality (raster)
-        'figure.dpi': display_dpi,
-        'savefig.dpi': 300,
-    })
+    # Schriftgrößen: icml2024 bringt schon Defaults mit; wir verschieben sie konsistent.
+    # (Matplotlib rcParams keys: font.size, axes.labelsize, legend.fontsize, xtick.labelsize, ytick.labelsize, axes.titlesize)
+    if font_adjustment != 0:
+        for k in [
+            "font.size",
+            "axes.labelsize",
+            "legend.fontsize",
+            "xtick.labelsize",
+            "ytick.labelsize",
+            "axes.titlesize",
+        ]:
+            if k in style and style[k] is not None:
+                style[k] = style[k] + font_adjustment
 
-    return jmlr_style
+    # Uni-Tübingen Farben (aus tueplots.constants.colors.rgb)
+    # Hinweis: rgb.<name> sind Tripel in 0..1; wir machen RGBA mit alpha draus.
+    if use_tue_palette:
+        tue_colors_rgb = [
+            rgb.tue_blue,
+            rgb.tue_red,
+            rgb.tue_green,
+            rgb.tue_orange,
+            rgb.tue_brown,
+            rgb.tue_gray,
+            rgb.tue_lightgold,
+            rgb.tue_violet,
+        ]
+        tue_colors_rgba = [(*c, alpha) for c in tue_colors_rgb]
+        style["axes.prop_cycle"] = cycler(color=tue_colors_rgba)
+
+    # Qualität / DPI
+    style.update(
+        {
+            "figure.dpi": display_dpi,
+            "savefig.dpi": 300,
+        }
+    )
+
+    return style
+
 
 def latex_escape(text: str) -> str:
     repl = {
