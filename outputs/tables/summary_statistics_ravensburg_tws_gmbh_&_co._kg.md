@@ -9,7 +9,7 @@
 | Share aligned                             | 0.5582175278993119 |
 | Number of site pairs                      | 21.0               |
 | Number of stations                        | 7.0                |
-| Spearman ρ (Bike Distance vs Correlation) | 0.090 (p=0.6993)   |
+| Spearman ρ (Bike Distance vs Correlation) | -0.013 (p=0.9554)  |
 
 ## Pairwise Statistics (Upper Triangle)
 
