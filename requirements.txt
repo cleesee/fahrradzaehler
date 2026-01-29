@@ -9,3 +9,4 @@ tueplots
 seaborn
 scikit-learn
 tabulate
+haversine
